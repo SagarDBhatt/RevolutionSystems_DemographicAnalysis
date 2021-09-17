@@ -8,8 +8,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "Population")
-public class Population {
+@Table(name = "city_population")
+public class city_Population {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
