@@ -105,4 +105,66 @@ public class Controller_DemographicAnalysis {
         return "Report generated successfully!!! ";
     }//End of get_All_Cities_Within_State()
 
+    @GetMapping(value = "/getCitiesWithinState/withinMiles")
+    public String get_All_Cities_Within_fiftyMiles(@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("distance") int distance) throws IOException {
+        List<Map<String,Object>> list_origin_city = repo_population.findByCity_NameAndState_Name(city,state);
+        JSONArray jsonArray_origin_city = JSONArray.fromObject(list_origin_city);
+        JSONObject jsonObject_origin_city = jsonArray_origin_city.getJSONObject(0);
+
+        ReportCalc.wasteGeneration(jsonObject_origin_city.getDouble("Population"));
+        ReportCalc.processingPricePerTon();
+        ReportCalc.materialRevenue();
+        ReportCalc.pickupCharge(jsonObject_origin_city.getDouble("Population"));
+        ReportCalc.truckingExpense(0);
+        ReportCalc.householdCost(jsonObject_origin_city.getDouble("Population"));
+        ReportCalc.procCost();
+        ReportCalc.netRecycling();
+
+        ReportCalc.writeToFile(jsonObject_origin_city.getDouble("Population"),
+                jsonObject_origin_city.getString("City_Name"),
+                jsonObject_origin_city.getString("State_Name"),
+                true,
+                jsonObject_origin_city.getString("County_Name"),
+                jsonObject_origin_city.getDouble("Latitude"),
+                jsonObject_origin_city.getDouble("Longitude"),
+                0D
+        );
+
+        List<Map<String,Object>> all_cities = repo_population.findAllCities();
+        ResponseEntity<List<Map<String,Object>>> responseEntity_all_cities = new ResponseEntity<>(all_cities, HttpStatus.OK);
+        JSONArray jsonArray_all_cities  = JSONArray.fromObject(all_cities);
+
+        for(int i=0;i<jsonArray_all_cities.size();i++) {
+            JSONObject jsonObject_all_cities = jsonArray_all_cities.getJSONObject(i);
+
+            ReportCalc.wasteGeneration(jsonObject_all_cities.getDouble("Population"));
+            ReportCalc.processingPricePerTon();
+            ReportCalc.materialRevenue();
+            ReportCalc.pickupCharge(jsonObject_all_cities.getDouble("Population"));
+
+            Double distance_bet_cities = ReportCalc.distance(jsonObject_origin_city.getDouble("Latitude"), jsonObject_origin_city.getDouble("Longitude"),
+                    jsonObject_all_cities.getDouble("Latitude"), jsonObject_all_cities.getDouble("Longitude"));
+
+            ReportCalc.truckingExpense(distance_bet_cities);
+            ReportCalc.householdCost(jsonObject_origin_city.getDouble("Population"));
+            ReportCalc.procCost();
+            ReportCalc.netRecycling();
+
+            if(distance_bet_cities <= distance){
+                ReportCalc.writeToFile(jsonObject_all_cities.getDouble("Population"),
+                        jsonObject_all_cities.getString("City_Name"),
+                        jsonObject_all_cities.getString("State_Name"),
+                        false,
+                        jsonObject_all_cities.getString("County_Name"),
+                        jsonObject_all_cities.getDouble("Latitude"),
+                        jsonObject_all_cities.getDouble("Longitude"),
+                        distance_bet_cities
+                );
+            }
+        }
+
+
+        return "Report generated successfully!!! ";
+    }//End of get_All_Cities_Within_fiftyMiles()
+
 }//End of class Controller_DemographicAnalysis

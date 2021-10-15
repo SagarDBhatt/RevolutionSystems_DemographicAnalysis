@@ -19,6 +19,9 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
             "  FROM [USPopulation].[dbo].[Population]\n" +
             "  WHERE State_Name = :state";
 
+    public String qry_findAllCities = "  SELECT * \n" +
+            "  FROM [USPopulation].[dbo].[Population]";
+
     @Transactional
     @Modifying
     @Query(value = qry_findByCityAndState, nativeQuery = true)
@@ -28,5 +31,10 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
     @Transactional
     @Query(value = qry_findByState, nativeQuery = true)
     public List<Map<String,Object>> findByState(String state);
+
+    @Modifying
+    @Transactional
+    @Query(value = qry_findAllCities, nativeQuery = true)
+    public List<Map<String,Object>> findAllCities();
 
 }
