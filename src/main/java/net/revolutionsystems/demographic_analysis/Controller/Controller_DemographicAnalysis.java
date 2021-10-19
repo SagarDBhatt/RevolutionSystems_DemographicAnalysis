@@ -42,7 +42,20 @@ public class Controller_DemographicAnalysis {
         ResponseEntity<List<Map<String,Object>>> resp_Entity = new ResponseEntity<>(allCity, HttpStatus.OK);
 
         return resp_Entity;
-    }
+    }//End of getAll()
+
+    /**
+     * Method to get the list of all the states
+     * @return
+     */
+    @GetMapping("/getAllStates")
+    public ResponseEntity<List<Map<String,Object>>> getAllStates(){
+        List<Map<String,Object>> allStates = repo_population.findAllStates();
+        ResponseEntity<List<Map<String,Object>>> responseEntity_allStates = new ResponseEntity<List<Map<String,Object>>>(allStates,HttpStatus.OK);
+        return responseEntity_allStates;
+    }//End of getAllStates()
+
+
 
     @GetMapping(value = "/getCitiesWithinState")
     public String get_All_Cities_Within_State(@RequestParam("city") String city, @RequestParam("state") String state) throws IOException {
