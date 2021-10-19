@@ -1,0 +1,44 @@
+****************** ONSJHJSA ******************
+**********************************************
+
+October 16th 2021
+--------------------
+** Requirement / Motivation:
+
+Create a full stack application to generate the demographic analysis report for the given city of the united states. When a user provides a city and
+state name & distance from the city, the application should perform the demographic analysis of the provided city within the given distance and
+generate the excel file.
+
+
+** STEPS to create Full Stack React App
+
+1. Create a springboot application. Build the controller and run the helloWorld REST API endpoint.
+2. Create Entity class with city, county, state, lat and long details. This is required to provide the JPA (Java Persistence API) framework support.
+
+    2A. Create an interface (Repository) that extends the JPA<ClassName, DataType of Id>
+            public interface Repo_Population extends JpaRepository<Population,Long>
+
+3. Create "application.properties" file within "resources" folder. Provide the database connection string in the configuration file.
+
+    ## SQL Server Database Connectivity
+
+    #spring.datasource.url=jdbc:sqlserver://localhost\\SAGAR_BHATT:1433;database=USPopulation;integratedSecurity=true
+    #spring.datasource.username=SAGAR_BHATT\\Freeware Sys
+
+4. Now, run the application. This will generate the table - "Population" (Name of the class OR provided as @Table annotation) in
+ the "USPopulation" database of the SQL Server database.
+
+5. Create a REST API endpoint to fetch the city and States from the API.
+
+    5A. Create a SQL Query to fetch all the details (city, county, state, population, lat, long) of the city and state provided.
+
+        public String qry_findByCityAndState = "  SELECT * \n" +
+                    "  FROM [USPopulation].[dbo].[Population]\n" +
+                    "  WHERE City_Name = :city AND State_Name = :state";
+
+            @Transactional
+            @Modifying
+            @Query(value = qry_findByCityAndState, nativeQuery = true)
+            public List<Map<String,Object>> findByCity_NameAndState_Name(String city, String state);
+
+    5B. The response of the query should be in "List<Map<String,Object>>" form. This is important to convert the response into JSON format.
