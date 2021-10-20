@@ -55,6 +55,28 @@ public class Controller_DemographicAnalysis {
         return responseEntity_allStates;
     }//End of getAllStates()
 
+    /**
+     * Find all cities within state
+     * @return
+     */
+    @GetMapping("/getAllCitiesWithinState")
+    public ResponseEntity<List<Map<String,Object>>> getAllCitiesWithinState(@RequestParam(value = "state") String state) {
+        List<Map<String,Object>> allCitiesWithinState = repo_population.findAllCitiesWithinState(state);
+        ResponseEntity<List<Map<String,Object>>> responseEntity_allCitiesWIthinState = new ResponseEntity<>(allCitiesWithinState, HttpStatus.OK);
+        return responseEntity_allCitiesWIthinState;
+    }//End of getAllCitiesWithinState()
+
+    /**
+     * Get all the cities
+     * @return
+     */
+    @GetMapping("/getAllCities")
+    public ResponseEntity<List<Map<String,Object>>> getAllCities(){
+        List<Map<String,Object>> list_getAllCities = repo_population.getAllCities();
+        ResponseEntity<List<Map<String,Object>>> respEntity_getAllCities = new ResponseEntity<>(list_getAllCities, HttpStatus.OK);
+        return respEntity_getAllCities;
+    }// End of getAllCities()
+
 
 
     @GetMapping(value = "/getCitiesWithinState")
