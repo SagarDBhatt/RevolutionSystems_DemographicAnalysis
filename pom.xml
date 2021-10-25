@@ -55,6 +55,14 @@
             <classifier>jdk15</classifier>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.sun.corba/glassfish-corba-omgapi -->
+        <dependency>
+            <groupId>com.sun.corba</groupId>
+            <artifactId>glassfish-corba-omgapi</artifactId>
+            <version>3.2.0-b005</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
