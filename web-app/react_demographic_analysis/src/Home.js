@@ -83,7 +83,7 @@ class Home extends React.Component {
 
         return (
 
-            <div>
+            <div class='myelement'>
                 <AppNav />
                 <Form>
                     <FormGroup>
@@ -94,6 +94,7 @@ class Home extends React.Component {
                             {all_States_list}
                         </select>
                     </FormGroup>
+                
 
                     <FormGroup>
                         <label>Cities* </label>{ }
@@ -102,6 +103,7 @@ class Home extends React.Component {
                             {all_cities_list}
                         </select>
                     </FormGroup>
+                    
 
                     <FormGroup>
                         <label>Distance* </label>{ }
@@ -115,6 +117,7 @@ class Home extends React.Component {
                             <option>60</option>
                         </select>
                     </FormGroup>
+                        
 
                     <FormGroup>
                         <Button
