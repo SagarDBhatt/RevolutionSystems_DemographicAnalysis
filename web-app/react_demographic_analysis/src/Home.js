@@ -24,9 +24,15 @@ class Home extends React.Component {
             isLoading: true,
             inMaterials:this.emptyItem
         }
+
+        this.handleChangeStates = this.handleChangeStates.bind(this);
     }
 
     async componentDidMount(){
+
+        const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
+
+        alert("LOCAL URL = " + LOCAL_URL);
 
         fetch('/opportunityReport/getAllStates', {
             method: 'GET',
@@ -42,26 +48,69 @@ class Home extends React.Component {
         });
 
 
-        fetch('/opportunityReport/getAllCities' , {
+        // fetch('/opportunityReport/getAllCities' , {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }    
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     this.setState({
+        //         all_cities : data,
+        //         isLoading: false
+        //     })
+        // }) 
+
+        fetch('/opportunityReport/getAllCitiesWithinState?' + new URLSearchParams({
+            state: 'Colorado'
+        }),{
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
-            }    
+                'Content-Type' : 'application/json'
+            }
         })
-        .then(response => response.json())
+        .then(resp => resp.json())
         .then(data => {
             this.setState({
-                all_cities : data,
-                isLoading: false
+                all_cities_within_state : data,
+                isLoading : false
             })
-        }) 
+        })
 
+    }//End of componentDidMount()
+
+    async handleChangeStates(event){
+        alert("Changing the state value == " + event.target.value);
+        const stateChangedValue = event.target.value;
+        const encodeStateValue = encodeURIComponent(stateChangedValue);
+
+        const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
+
+        fetch('/opportunityReport/getAllCitiesWithinState?' + new URLSearchParams({
+            state: stateChangedValue
+        }),{
+            method: 'GET',
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        })
+        .then(resp => resp.json())
+        .then(data => {
+            this.setState({
+                all_cities_within_state : data,
+                isLoading : false
+            })
+        })
+
+        alert("after setting up the all cities within state: ");
     }
 
+//Begining of the render()
     render() {
         <h2>Demographic Analysis</h2>
         const all_States  = this.state.all_States;
-        const all_cities = this.state.all_cities;
+        const all_cities_within_state = this.state.all_cities_within_state;
         const isLoading = this.state.isLoading;
 
 
@@ -71,7 +120,7 @@ class Home extends React.Component {
         </option>)
         //console.log(all_States_list)
 
-        let all_cities_list = all_cities.map(city => 
+        let all_cities_list = all_cities_within_state.map(city => 
             <option key={city.City_Name}>
                 {city.City_Name}
             </option>
@@ -83,59 +132,61 @@ class Home extends React.Component {
 
         return (
 
-            <div class='myelement'>
+            <div class='main-div-top'>
                 <AppNav />
-                <Form>
-                    <FormGroup>
-                        <label>States* </label>{ }
-                        <select
-                        onChange={this.handleChange}>
-                            <option></option>
-                            {all_States_list}
-                        </select>
-                    </FormGroup>
-                
 
-                    <FormGroup>
-                        <label>Cities* </label>{ }
-                        <select onChange={this.handleChange}>
-                            <option></option>
-                            {all_cities_list}
-                        </select>
-                    </FormGroup>
+                <div id='div-form-group'>
+                    <Form id='form-main'>
+                        <FormGroup>
+                            <label style={{paddingRight: '12px'}}>States* </label>{ }
+                            <select onChange={this.handleChangeStates}>
+                                <option>Select State Name:</option>
+                                {all_States_list}
+                            </select>
+                        </FormGroup>
                     
 
-                    <FormGroup>
-                        <label>Distance* </label>{ }
-                        <select>
-                            <option>30</option>
-                            <option>35</option>
-                            <option>40</option>
-                            <option>45</option>
-                            <option>50</option>
-                            <option>55</option>
-                            <option>60</option>
-                        </select>
+                        <FormGroup>
+                            <label style={{paddingRight: '12px'}}>Cities* </label>{ }
+                            <select onChange={this.handleChange}>
+                                <option>Select City Name: </option>
+                                {all_cities_list}
+                            </select>
+                        </FormGroup>
+                        
+
+                        <FormGroup>
+                            <label style={{paddingRight: '12px'}}>Distance* </label>{ }
+                            <select>
+                                <option>30</option>
+                                <option>35</option>
+                                <option>40</option>
+                                <option>45</option>
+                                <option>50</option>
+                                <option>55</option>
+                                <option>60</option>
+                            </select>
+                        </FormGroup>
+                            
+
+                        <FormGroup>
+                            <Button
+                                color="primary"
+                                type="submit"
+                                //   onClick={this.onShowAlert}
+                            >
+                                {" "}
+                                Save{" "}
+                            </Button>{" "}
+                            
+                            <Button color="secondary">
+                                {" "}
+                                Cancel{" "}
+                            </Button>
                     </FormGroup>
-                        
 
-                    <FormGroup>
-                        <Button
-                            color="primary"
-                            type="submit"
-                            //   onClick={this.onShowAlert}
-                        >
-                            {" "}
-                            Save{" "}
-                        </Button>{" "}
-                        
-                        <Button color="secondary">
-                            {" "}
-                            Cancel{" "}
-                        </Button>
-                  </FormGroup>
-
-                </Form>
+                    </Form>
+                </div>
             </div>
 
         )

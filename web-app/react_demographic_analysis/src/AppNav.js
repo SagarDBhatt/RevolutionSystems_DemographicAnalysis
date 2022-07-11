@@ -13,23 +13,23 @@ import {
   DropdownItem,
   NavbarText
 } from 'reactstrap';
-import './App.css'
+import './Stylesheet/main.css';
 
 class AppNav extends React.Component {
     
     render() {
 
         return (
-            <div>
-                    <Navbar color="light" light expand="md">
-                        <NavbarBrand href="/">Demographic Analysis Tool </NavbarBrand>
+            <div id='navbar-div-main'>
+                    <Navbar id="navbar-main" expand="md">
+                        <NavbarBrand id='navbar-main-title' href="/">Demographic Analysis Tool </NavbarBrand>
                     
-                        <Nav className="mr-auto" navbar>
+                        <Nav id='navbar-ul-main' className="mr-auto" navbar>
                             <NavItem>
-                            <   NavLink href="/home/">Home</NavLink>
+                                <NavLink className='navlink-main' href="/home/">Home</NavLink>
                             </NavItem>
                             <NavItem>
-                            <   NavLink href="/">Opportunity Report</NavLink>
+                                <NavLink className='navlink-main' href="/">Opportunity Report</NavLink>
                             </NavItem> 
                         </Nav>
                     </Navbar>

@@ -1,0 +1,20 @@
+ul#navbar-ul-main {
+    display: inline-flex;
+}
+
+a#navbar-main-title {
+    color: white;
+}
+
+a.navlink-main.nav-link {
+    color: white;
+}
+
+div#navbar-div-main {
+    background-color: #009444;
+}
+
+div#div-form-group {
+    top: 10px;
+    position: relative;
+}

@@ -24,7 +24,7 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
 
     public String qry_getAllStates = "SELECT DISTINCT State_Name FROM [USPopulation].[dbo].[Population] ORDER BY State_Name";
 
-    public String qry_getAllCitiesWithinState = "SELECT DISTINCT City_Name FROM [USPopulation].[dbo].[Population] WHERE State_Name = :state";
+    public String qry_getAllCitiesWithinState = "SELECT DISTINCT City_Name FROM [USPopulation].[dbo].[Population] WHERE State_Name = ?1";
 
     public String qry_getAllcities = "SELECT DISTINCT City_Name FROM [USPopulation].[dbo].[Population] ORDER BY City_Name";
 
