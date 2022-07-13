@@ -13,7 +13,7 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
 
     public String qry_findByCityAndState = "  SELECT * \n" +
             "  FROM [USPopulation].[dbo].[Population]\n" +
-            "  WHERE City_Name = :city AND State_Name = :state";
+            "  WHERE City_Name = ?1 AND State_Name = ?2";
 
     public String qry_findByState = "  SELECT * \n" +
             "  FROM [USPopulation].[dbo].[Population]\n" +
@@ -25,6 +25,8 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
     public String qry_getAllStates = "SELECT DISTINCT State_Name FROM [USPopulation].[dbo].[Population] ORDER BY State_Name";
 
     public String qry_getAllCitiesWithinState = "SELECT DISTINCT City_Name FROM [USPopulation].[dbo].[Population] WHERE State_Name = ?1";
+
+    public String qry_getAllWithinState = "SELECT * FROM [USPopulation].[dbo].[Population] WHERE State_Name = ?1";
 
     public String qry_getAllcities = "SELECT DISTINCT City_Name FROM [USPopulation].[dbo].[Population] ORDER BY City_Name";
 
@@ -52,6 +54,11 @@ public interface Repo_Population extends JpaRepository<Population,Long> {
     @Modifying
     @Query(value = qry_getAllCitiesWithinState,nativeQuery = true)
     public List<Map<String,Object>> findAllCitiesWithinState(String state);
+
+    @Transactional
+    @Modifying
+    @Query(value = qry_getAllWithinState,nativeQuery = true)
+    public List<Map<String,Object>> findAllWithinState(String state);
 
     @Modifying
     @Transactional

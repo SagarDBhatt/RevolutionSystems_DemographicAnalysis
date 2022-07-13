@@ -36,58 +36,69 @@ public class ReportCalc {
 
 
 
-    public static void wasteGeneration(double cityPopulation)
+    public static Double wasteGeneration(double cityPopulation)
     {
         wstGenerationTPD = cityPopulation * (wstGenerationRate/2000) * wstDiversionRate;
         df = new DecimalFormat("#.#");
         df.setRoundingMode(RoundingMode.DOWN);
         wstTPD = Double.parseDouble(df.format(wstGenerationTPD));
+        return wstGenerationTPD;
         //System.out.println("Waste Generated = " + wstTPD);
     }
 
-    public static void processingPricePerTon()
+    public static Double processingPricePerTon()
     {
         processingRevenue = Double.parseDouble(new DecimalFormat("#.#").format(wstGenerationTPD * prcPricePerTon));
+        return processingRevenue;
         //System.out.println("Processing Revenue of " + CityName + " is $" + processingRevenue);
     }
 
-    public static void materialRevenue()
+    public static Double materialRevenue()
     {
         materialRevenue = Double.parseDouble(new DecimalFormat("#.#").format(wstGenerationTPD * targetYield * mtrlPricePerTon));
+        return materialRevenue;
         //System.out.println("Material Revenue generated in" + CityName + " is $" + materialRevenue);
     }
 
-    public static void pickupCharge(double cityPopulation)
+    public static Double pickupCharge(double cityPopulation)
     {
         pickupCharge = Double.parseDouble(new DecimalFormat("#.#").format((cityPopulation/peoplePerHouse) * (pickupChargePerHH)/30));
+        return pickupCharge;
         //System.out.println("Pickup charge per House hold in " + cityName + " $" + pickupCharge + " daily");
     }
 
-    public static void truckingExpense(double distanceBetCities)
+    public static Double truckingExpense(double distanceBetCities)
     {
         truckingExpenseUnbaled = Double.parseDouble(new DecimalFormat("#.#").format((2*distanceBetCities*truckOperatingCost)/truckingCostUnbaled*wstGenerationTPD));
+        return truckingExpenseUnbaled;
         //JOptionPane.showMessageDialog(null, "Trucking expense to transport unbaled material is $" + truckingExpenseUnbaled);
     }
 
-    public static void householdCost(double cityPopulation)
+    public static Double householdCost(double cityPopulation)
     {
         householdCost = Double.parseDouble(new DecimalFormat("#.#").format((processingRevenue + truckingExpenseUnbaled)/((cityPopulation/peoplePerHouse))*30));
+        return householdCost;
         //JOptionPane.showMessageDialog(null, "House hold cost $" + householdCost);
     }
 
-    public static void procCost()
+    public static Double procCost()
     {
         processingCost = Double.parseDouble(new DecimalFormat("#.#").format((wstGenerationTPD * processingCostPerTon)));
+        return processingCost;
         //JOptionPane.showMessageDialog(null, "Processing Cost $" + processingCost);
     }
 
-    public static void netRecycling()
+    public static Double netRecycling()
     {
         netRecycling = Double.parseDouble(new DecimalFormat("#.#").format(processingRevenue + materialRevenue + pickupCharge - processingCost));
         //JOptionPane.showMessageDialog(null, "Net value of Recycling $" + netRecycling);
+        return netRecycling;
+    }
 
+    public static Double annualizedRecycling(){
         annualRecycling = Double.parseDouble(new DecimalFormat("#.#").format(netRecycling * 365));
         //JOptionPane.showMessageDialog(null, "Annualized Recycling revenue $" + annualRecycling);
+        return annualRecycling;
     }
 
     public static void writeToFile(double cityPopulation, String cityName, String State, boolean column_Headers,String Counties, double lati, double longi, Double distBetCities) throws IOException, IOException {
