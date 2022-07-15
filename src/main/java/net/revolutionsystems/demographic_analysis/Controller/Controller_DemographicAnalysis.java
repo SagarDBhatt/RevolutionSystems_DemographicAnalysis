@@ -15,10 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -59,6 +56,8 @@ public class Controller_DemographicAnalysis {
      * @return
      */
     @GetMapping("/getAllStates")
+//    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://bucket-revsystems-demographic-analysis-tool.s3-website.us-east-2.amazonaws.com")
     public ResponseEntity<List<Map<String,Object>>> getAllStates(){
         List<Map<String,Object>> allStates = repo_population.findAllStates();
         ResponseEntity<List<Map<String,Object>>> responseEntity_allStates = new ResponseEntity<List<Map<String,Object>>>(allStates,HttpStatus.OK);
@@ -70,6 +69,8 @@ public class Controller_DemographicAnalysis {
      * @return
      */
     @GetMapping("/getAllCitiesWithinState")
+    //@CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://bucket-revsystems-demographic-analysis-tool.s3-website.us-east-2.amazonaws.com")
     public ResponseEntity<List<Map<String,Object>>> getAllCitiesWithinState(@RequestParam(value = "state") String state) {
         List<Map<String,Object>> allCitiesWithinState = repo_population.findAllCitiesWithinState(state);
         ResponseEntity<List<Map<String,Object>>> responseEntity_allCitiesWIthinState = new ResponseEntity<>(allCitiesWithinState, HttpStatus.OK);
@@ -150,6 +151,8 @@ public class Controller_DemographicAnalysis {
     }//End of get_All_Cities_Within_State()
 
     @GetMapping(value = "/getCitiesWithinState/withinMiles")
+    //@CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://bucket-revsystems-demographic-analysis-tool.s3-website.us-east-2.amazonaws.com")
     public ResponseEntity<Resource> get_All_Cities_Within_fiftyMiles(@RequestParam("city") String city, @RequestParam("state") String state, @RequestParam("distance") int distance_parameter) throws IOException {
         System.out.println("API called ============================");
         System.out.println("***********************************************");

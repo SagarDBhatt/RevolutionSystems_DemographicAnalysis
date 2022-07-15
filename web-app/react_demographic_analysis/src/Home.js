@@ -34,69 +34,63 @@ class Home extends React.Component {
 
     async componentDidMount(){
 
+        const GLOBAL_URL = process.env.REACT_APP_GLOBAL_URL;
+
         const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
+        
+        const headers_def = new Headers();
+        headers_def.append("Access-Control-Allow-Origin", "*");
+        headers_def.append("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        headers_def.append('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
 
-        //alert("LOCAL URL = " + LOCAL_URL);
-
-        fetch('/opportunityReport/getAllStates', {
-            method: 'GET',
-            headers: {
-             'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                all_States : data,
-                isLoading : false
-            })
-        });
-
-
-        // fetch('/opportunityReport/getAllCities' , {
+        // fetch(GLOBAL_URL + '/opportunityReport/getAllStates', {
         //     method: 'GET',
+        //     mode: 'no-cors',
         //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }    
+        //         'Content-Type': 'text/plain'
+        //     }
         // })
         // .then(response => response.json())
         // .then(data => {
         //     this.setState({
-        //         all_cities : data,
-        //         isLoading: false
-        //     })
-        // }) 
-
-        // fetch('/opportunityReport/getAllCitiesWithinState?' + new URLSearchParams({
-        //     state: 'Colorado'
-        // }),{
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type' : 'application/json'
-        //     }
-        // })
-        // .then(resp => resp.json())
-        // .then(data => {
-        //     this.setState({
-        //         all_cities_within_state : data,
+        //         all_States : data,
         //         isLoading : false
         //     })
         // })
+        // .catch(error => {
+        //     console.log("Error in componentDidMount -- " + error);
+        // });
+
+    /**
+    * REST endpoint to fetch the state data
+    */
+      fetch(GLOBAL_URL + "/opportunityReport/getAllStates", {
+        method: "GET",
+        headers: headers_def
+      })
+        .then((response) => response.json())
+        .then((result) => {
+            this.setState({
+                all_States : result,
+                isLoading : false
+            })
+        })
+        .catch((e) => {
+          alert("Token Expired. Pleae re-login");
+          console.log("Error is", e);
+        });
 
     }//End of componentDidMount()
 
     handleChangeStates(event){
-        // alert("Changing the state value == " + event.target.value);
-        // const stateChangedValue = event.target.value;
-        // const encodeStateValue = encodeURIComponent(stateChangedValue);
-
-        // const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
+        const GLOBAL_URL = process.env.REACT_APP_GLOBAL_URL;
+        const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
 
         this.setState({
             selectedState : event.target.value
         })
 
-        fetch('/opportunityReport/getAllCitiesWithinState?' + new URLSearchParams({
+        fetch(GLOBAL_URL + '/opportunityReport/getAllCitiesWithinState?' + new URLSearchParams({
             state: event.target.value
         }),{
             method: 'GET',
@@ -127,10 +121,13 @@ class Home extends React.Component {
 
     buttonClicked(event){
         //alert("submit btn clicked!! ");
+        const GLOBAL_URL = process.env.REACT_APP_GLOBAL_URL;
+        const LOCAL_URL = process.env.REACT_APP_LOCAL_URL;
+
         alert("Selected state = " + this.state.selectedState + "\nSelected city = " + this.state.selectedCity
             + "\nSelected Distance = " + this.state.selectedDistance);
         
-        fetch('/opportunityReport/getCitiesWithinState/withinMiles?' + new URLSearchParams({
+        fetch(GLOBAL_URL + '/opportunityReport/getCitiesWithinState/withinMiles?' + new URLSearchParams({
             city : this.state.selectedCity,
             state: this.state.selectedState,
             distance : this.state.selectedDistance
@@ -147,24 +144,25 @@ class Home extends React.Component {
             a.href = url;
             a.download = 'Opportunity_Report_' + this.state.selectedCity + "_" + this.state.selectedState + '.xlsx';
             a.click();
-          });
-          //window.location.href = response.url;
-      });
+          })
+        });
         
-        fetch('/opportunityReport/getCitiesWithinState/withinMiles?' + new URLSearchParams({
-            city : this.state.selectedCity,
-            state: this.state.selectedState,
-            distance : this.state.selectedDistance
-        }),{
-            method: 'GET',
-            headers: {
-                'Content-Type' : 'application/json'
-            }
-        })
-        .then(resp => resp.json())
-        .then(data => {
-            console.log("Report Generated");
-        })
+        // fetch('/opportunityReport/getCitiesWithinState/withinMiles?' + new URLSearchParams({
+        //     city : this.state.selectedCity,
+        //     state: this.state.selectedState,
+        //     distance : this.state.selectedDistance
+        // }),{
+        //     method: 'GET',
+        //     mode: 'no-cors',
+        //     headers: {
+        //         'Content-Type' : 'application/json'
+        //     }
+        // })
+        // .then(resp => resp.json())
+        // .then(data => {
+        //     console.log("Report Generated");
+        // })
+
 
         // fetch('/opportunityReport/getCitiesWithinState/withinMiles?', new URLSearchParams({
         //     city : this.state.selectedCity,
